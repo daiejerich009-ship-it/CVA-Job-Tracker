@@ -1,0 +1,28 @@
+# Private Google/API credentials
+credentials.json
+token.json
+.env
+
+# Private/local tracker state
+sheet_id.txt
+job_tracker.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Test/cache files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local virtual environment
+.venv/
+venv/
+env/
