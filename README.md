@@ -1,168 +1,167 @@
 # CVA Job Tracker
 
-A Windows-friendly job-search automation project that collects remote job listings, filters them for Philippines/Filipino eligibility and entry-level non-voice/VA work, and syncs the results to Google Sheets for easy browsing and application tracking.
+A Windows-compatible job-search automation project designed to collect, filter, organize, and track relevant remote job opportunities in a Google Sheets workspace.
 
-## What it does
+The project is designed around entry-level and general virtual-assistant-oriented opportunities, including non-voice, administrative, chat, email, data-entry, customer-support, lead-follow-up, and healthcare virtual-assistant roles.
 
-- Collects listings from legitimate public job sources:
-  - Remotive
-  - Remote OK
-  - Arbeitnow
-  - Himalayas
-  - Jobicy
-- Filters listings for:
-  - Philippines/Filipino eligibility
-  - VA, administrative, chat, email, data-entry, customer-support, lead-follow-up, healthcare VA and related roles
-  - Entry-level / beginner-friendly signals
-- Excludes clear voice/call-center listings and listings requiring multiple years of experience.
-- Creates stable job IDs and removes duplicates.
-- Keeps direct, clickable application URLs.
-- Syncs results to one reusable Google Sheet.
-- Preserves manual application-tracking fields during updates.
-- Provides four Google Sheets tabs:
-  - Dashboard
-  - Jobs
-  - Applications
-  - Settings
-- Supports one-time runs with `--once` and continuous background mode.
-- Never submits applications automatically.
+## What It Does
 
-## Google Sheets dashboard
+- Searches multiple legitimate remote-job sources
+- Filters listings based on configured target roles and eligibility criteria
+- Prioritizes Philippines/Filipino-eligible opportunities
+- Filters out clearly unsuitable voice/call and senior-role listings
+- Removes duplicate job listings using stable identifiers
+- Stores job listings in Google Sheets
+- Preserves manual application-tracking information during updates
+- Provides direct clickable application URLs
+- Supports manual application tracking
+- Includes dashboard-style job and application monitoring
+- Runs continuously or as a one-time search
+- Supports Windows Task Scheduler for automatic background execution
+- Does not automatically submit job applications
 
-The workbook is designed for quick public viewing and practical job tracking.
+## Job Sources
 
-**Dashboard**
-- Total jobs found
-- Jobs found today
-- Not applied
-- Applications submitted
-- Follow-ups needed
-- Interviews scheduled
-- Offers received
-- Rejections
-- Follow-ups due
-- Last local sync time
-- Quick "How to Use" instructions
+The tracker is configured to work with:
 
-**Jobs**
-- Search results with filters
-- Match reasoning and matched keywords
-- Direct application links
-- Application status and follow-up fields
+- Remotive
+- Remote OK
+- Arbeitnow
+- Himalayas
+- Jobicy
 
-**Applications**
-- Application-focused view for tracking progress and responses
+Job availability and source data may change over time.
 
-**Settings**
-- Search interval
-- Target applicant group
-- Target roles
-- Exclusions
-- Source list
-- Automation notes
+## Target Job Categories
 
-## Automation behavior
+The configured search focuses on opportunities such as:
 
-The default search interval is **360 minutes (6 hours)**. This conservative interval is used to avoid unnecessary polling of public job sources.
+- General Virtual Assistant
+- Administrative Virtual Assistant
+- Chat Support
+- Email Support
+- Data Entry
+- Customer Support
+- Lead Follow-Up
+- Healthcare Virtual Assistant
+- Other relevant non-voice remote roles
 
-On Windows, the tracker can be started automatically with Task Scheduler and run in the background using `pythonw.exe`, so no PowerShell window needs to stay open.
+The tracker also excludes clearly unsuitable listings based on the configured filtering rules.
 
-Useful commands:
+## Google Sheets Workspace
 
-```text
+The project uses Google Sheets as the tracking interface.
+
+The workspace includes:
+
+### Dashboard
+
+Provides an overview of job and application activity.
+
+### Jobs
+
+Contains collected job listings, including:
+
+- Job title
+- Company
+- Location/eligibility information
+- Source
+- Application URL
+- Job status
+- Stable job identifier
+
+### Applications
+
+Provides manual application tracking so the user can record progress such as:
+
+- Applied
+- Interview
+- Follow-up
+- Rejected
+- Other manually tracked statuses
+
+### Settings
+
+Contains the configurable search interval, target roles, exclusions, sources, and automation settings.
+
+## Automation
+
+The tracker supports two main modes.
+
+### One-time search
+
+```bash
 python job_tracker.py --once
+Continuous mode
 python job_tracker.py
+
+The configured default search interval is 360 minutes (6 hours).
+
+For Windows background execution, the project can be configured with Windows Task Scheduler and Python's pythonw.exe.
+
+This allows the tracker to start automatically when Windows logs in without requiring a PowerShell window to remain open.
+
+Testing
+
+The project includes a test file:
+
+test_job_tracker.py
+
+Testing can be performed with:
+
+pytest
+
+An offline testing mode is also available:
+
 python job_tracker.py --offline-test
-python job_tracker.py --open-sheet
-```
+Security
 
-## Setup overview
+Private credentials and local runtime files are intentionally excluded from the public repository.
 
-1. Install Python 3.10+.
-2. Install dependencies:
+The project should never publish:
 
-```text
-pip install -r requirements.txt
-```
-
-3. Create a Google Cloud project and enable the Google Sheets API.
-4. Create a Desktop OAuth client and place the downloaded file beside `job_tracker.py` as:
-
-```text
-credentials.json
-```
-
-5. Run the tracker once and complete Google OAuth.
-6. The tracker creates/reuses the configured Google Sheet and saves its spreadsheet ID locally in `sheet_id.txt`.
-7. For Windows automation, create a Task Scheduler task that starts:
-
-```text
-pythonw.exe "C:\Path\To\CVA Job Tracker\job_tracker.py"
-```
-
-## Security and public-demo rules
-
-Do **not** publish any of these private files:
-
-```text
 credentials.json
 token.json
 .env
 sheet_id.txt
 job_tracker.log
-```
 
-A public portfolio/demo should contain only sanitized sample data and documentation. The live tracker and private Google credentials should remain private.
+A .gitignore file is included to help prevent accidental publication.
 
-The public Google Sheet demo should be shared as **Viewer** so visitors can inspect the project without changing the workbook.
+Important Limitation
 
-## Testing
+This project does not automatically apply to jobs.
 
-The project includes automated tests for core filtering and URL behavior, including:
+It only collects, filters, organizes, and tracks job opportunities. The user remains responsible for reviewing each listing and submitting applications manually.
 
-- Philippines/entry-level non-voice matching
-- Call-center/voice exclusion
-- Multi-year experience exclusion
-- Foreign-only location exclusion
-- Duplicate-job removal
-- HTTP/HTTPS URL validation
+Job listings can change or expire because the project depends on external job sources.
 
-The current final tracker passes the included 7-test suite.
-
-## Important limitation
-
-Job availability, eligibility wording, and application pages are controlled by the original job sources and can change after a listing is collected. The tracker therefore helps discover and organize opportunities; users should always verify the original posting before applying.
-
-## Project structure
-
-```text
-CVA Job Tracker/
+Project Structure
+CVA-Job-Tracker/
 ├── job_tracker.py
+├── test_job_tracker.py
+├── config.py
 ├── auth.py
 ├── setup_login.py
-├── config.py
 ├── requirements.txt
-├── .env.example
-├── tests/
-│   └── test_job_tracker.py
-├── credentials.json        # private; do not publish
-├── token.json              # private; do not publish
-├── sheet_id.txt            # private; do not publish
-└── job_tracker.log         # private/local diagnostic file
-```
+├── README.md
+└── .gitignore
+Skills Demonstrated
+Python automation
+Job-search workflow automation
+Data filtering
+Duplicate detection
+Google Sheets integration
+OAuth authentication
+Windows Task Scheduler
+Data organization
+Application tracking
+Basic testing
+Configuration management
+Security-conscious credential handling
+Technical documentation
+Portfolio Purpose
 
-## Portfolio note
+CVA Job Tracker demonstrates how a repetitive job-search workflow can be organized into a practical automation system combining data collection, filtering, spreadsheet organization, application tracking, and scheduled execution.
 
-This project demonstrates practical skills in:
-
-- Python automation
-- API/HTTP data collection
-- text-based job filtering
-- data normalization and deduplication
-- Google Sheets API integration
-- spreadsheet workflow design
-- Windows Task Scheduler automation
-- basic security hygiene
-- testing and troubleshooting
-
-It is intended as a working automation project and portfolio demonstration, not as an automatic application-submission system.
+The system keeps the final application decision under the user's control and does not automatically submit applications.
